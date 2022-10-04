@@ -26,8 +26,16 @@ p {
   color: red;
 }
 
-#tabla{
-  width: auto;
+
+
+
+table {
+  /* Para centrar usamos "auto" en la alineación horizontal */
   margin: 0 auto;
-  
+ 
+}
+
+#redes{
+
+  font-family: Arial, Helvetica, sans-serif;
 }
