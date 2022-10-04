@@ -2,7 +2,7 @@ header {
 
   
     width:100%;
-    background-color: grey;
+    background-color:black;
   margin: 0px;
   padding: 10px;
 
@@ -16,26 +16,42 @@ body {
   border: 0px;
 }
 
-h1,h6 {
+h1 {
+  color: white;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+h6 {
   color: black;
 
   font-family: Arial, Helvetica, sans-serif;
 }
-
 p {
   color: red;
 }
 
+#mitad{
+  height:500px;
+  width:100%;
+  background-color:rgb(139, 139, 139);
+margin: 0px;
+padding: 10px;
 
+}
 
 
 
 table {
   /* Para centrar usamos "auto" en la alineación horizontal */
   margin: 0 auto;
- 
+ padding: 150px;
 }
-
+#tablaContactos {
+  /* Para centrar usamos "auto" en la alineación horizontal */
+  margin: 0px;
+  padding: 0;
+  text-align: right: ;
+}
 #redes{
 
   font-family: Arial, Helvetica, sans-serif;
