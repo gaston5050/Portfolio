@@ -32,7 +32,8 @@ h3{
   padding-bottom: 0px;
 }
 p {
-  color: red;
+  color: white;
+ 
 }
 
 #mitad{
@@ -52,7 +53,8 @@ p {
   text-align: center;
   color: black;
   margin:0 auto;
- padding: 145px;
+ padding: 0px;
+ padding-bottom: 20px;
 }
 #tablaContactos {
   padding-left: 715px;
@@ -103,4 +105,27 @@ td{
   width: 100px;
   float: right;
   margin-right: 30px;
+}
+
+#descripcion{
+
+  
+  width:45%;
+ padding-top: 10px;
+  margin: auto;
+
+
+
+
+
+}
+
+#contenedor2 {
+  
+
+  height: 200px;
+  width: 100%;
+ 
+  
+ 
 }
