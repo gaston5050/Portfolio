@@ -18,13 +18,16 @@ body {
 
 h1 {
   color: white;
-
+  margin: 30px;
   font-family: Arial, Helvetica, sans-serif;
 }
-h6 {
+h3{
+  
   color: black;
-
+  text-align: right;
   font-family: Arial, Helvetica, sans-serif;
+  margin-right:30px ;
+  padding-bottom: 0px;
 }
 p {
   color: red;
@@ -33,26 +36,42 @@ p {
 #mitad{
   height:500px;
   width:100%;
+  padding:0%;
   background-color:rgb(139, 139, 139);
-margin: 0px;
-padding: 10px;
 
 }
 
 
 
-table {
+#programas {
   /* Para centrar usamos "auto" en la alineación horizontal */
   margin: 0 auto;
- padding: 150px;
+ padding: 145px;
 }
 #tablaContactos {
-  /* Para centrar usamos "auto" en la alineación horizontal */
-  margin: 0px;
-  padding: 0;
-  text-align: right: ;
+  padding-left: 715px;
+
+ 
+  width: 100%;
+  height: 30px;
+
 }
 #redes{
 
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+#invitacion{
+
+  
+ 
+  
+  height: 20px;
+ 
+
+}
+td{
+  padding=555px;
 }
