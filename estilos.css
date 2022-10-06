@@ -2,14 +2,16 @@ header {
 
   
    
-    background-color:black;
+   
+    background-image:url(https://wallpapercave.com/wp/LzJoPy4.png);
   margin: 0px;
   padding: 10px;
 
 }
 
 body {
-  color:darkgrey;
+  
+ 
   margin-top: 0px;
   margin: 0px;
   padding: 0px;
@@ -114,6 +116,7 @@ td{
 
   
   width:45%;
+  padding-left: 40px;
  padding-top: 10px;
   margin: auto;
 
