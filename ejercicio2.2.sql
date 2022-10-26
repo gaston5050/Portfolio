@@ -22,22 +22,73 @@
 	where  mat.Nombre <>'Pino' and (year(p.fechasolicitud) = 2022))
 	order by c.id asc
 
-	select distinct c.*, year(p.FechaSolicitud),mat.Nombre  from clientes c
-	inner join pedidos p on c.ID = p.IDCliente
+	select distinct *  from clientes c 
+	where c.id not in (
+	select p.idCliente from Pedidos p
 	inner join productos pro on pro.id =p.IDProducto
 	inner join Materiales_x_Producto mxp on pro.id = mxp.IDProducto
 	inner join materiales mat on mat.ID = mxp.IDMaterial
-	where year(p.FechaSolicitud) = 2022 and mat.Nombre <>'Pino'
+	where year(p.FechaSolicitud) = 2022 and mat.Nombre ='Pino' and p.IDCliente= c.id)
 
+
+SELECT * FROM Clientes C
+WHERE Not Exists (
+    SELECT DISTINCT P.IDCLIENTE FROM Pedidos P
+    INNER JOIN Productos PRO ON PRO.ID = P.IDProducto
+    INNER JOIN Materiales_x_Producto MxP ON MxP.IDProducto = PRO.ID
+    INNER JOIN Materiales MAT ON MAT.ID = MxP.IDMaterial
+    WHERE MAT.Nombre = 'Pino' AND YEAR(P.FechaSolicitud) = 2022 AND P.IDCliente = C.ID
+)
 
 
 
 --4
---Los colaboradores que no hayan realizado ninguna tarea de Lijado en pedidos que se solicitaron en el año 2021.
+--Los colaboradores que no hayan realizado ninguna tarea de Lijado en
+--pedidos que se solicitaron en el año 2021.
+select c.* from colaboradores c where not exists (
+select p.* from pedidos p
+inner join Tareas_x_Pedido txp on p.ID= txp.IDPedido
+inner join tareas t on txp.IDTarea = t.id
+where t.Nombre <> 'Lizado' and year(p.FechaSolicitud) = 2021 and c.Legajo = txp.Legajo)
+
+
+select * from colaboradores
+
+ 
 --5
 --Los clientes a los que les hayan enviado (no necesariamente entregado) al menos un tercio de sus pedidos.
+
+select * from (select c.apellidos, c.nombres,
+(select count(*) from pedidos p where p.idCliente=c.id) cantPedidos,
+(select count(*) from pedidos p inner join envios e on e.IDPedido = p.id
+where p.IDCliente = c.id) cantEnviados from clientes c) tabla
+where tabla.cantEnviados >= tabla.cantPedidos/3.0
+
+
+
+
+
+
 --6
 --Los colaboradores que hayan realizado todas las tareas (no necesariamente en un mismo pedido).
+
+
+	Select * From (
+    Select Cli.Apellidos, Cli.Nombres,
+    (
+        Select count(*) From Pedidos PE Where PE.IDCliente = Cli.ID
+    ) as CantPedidos,
+    (
+        Select count(*) From Pedidos PE 
+        Inner Join Envios E ON E.IDPedido = PE.ID
+        Where PE.IDCliente = Cli.ID
+    ) as CantEnviados
+    From Clientes Cli
+) As Tabla
+Where Tabla.CantEnviados >= Tabla.CantPedidos/3.0
+
+
+
 --7
 --Por cada producto, la descripción y la cantidad de colaboradores fulltime que hayan trabajado en él y la cantidad de colaboradores parttime.
 --8
