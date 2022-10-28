@@ -52,6 +52,7 @@ inner join tareas t on txp.IDTarea = t.id
 where t.Nombre <> 'Lizado' and year(p.FechaSolicitud) = 2021 and c.Legajo = txp.Legajo)
 
 
+
 select * from colaboradores
 
  
@@ -87,10 +88,13 @@ where tabla.cantEnviados >= tabla.cantPedidos/3.0
 ) As Tabla
 Where Tabla.CantEnviados >= Tabla.CantPedidos/3.0
 
-
-
 --7
---Por cada producto, la descripción y la cantidad de colaboradores fulltime que hayan trabajado en él y la cantidad de colaboradores parttime.
+--Por cada producto, la descripción y la cantidad de colaboradores
+--fulltime que hayan trabajado en él y la cantidad de colaboradores parttime.
+
+ select p.descripcion, (select  count(colaboradores) from
+
+
 --8
 --Por cada producto, la descripción y la cantidad de pedidos enviados y la cantidad de pedidos sin envío.
 --9
