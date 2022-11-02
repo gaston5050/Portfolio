@@ -92,13 +92,91 @@ Where Tabla.CantEnviados >= Tabla.CantPedidos/3.0
 --Por cada producto, la descripción y la cantidad de colaboradores
 --fulltime que hayan trabajado en él y la cantidad de colaboradores parttime.
 
- select p.descripcion, (select  count(colaboradores) from
+	SELECT Pro.DESCRIPCION, (
+		select count(distinct txp.legajo) from Tareas_x_Pedido txp
+		inner join colaboradores c on c.Legajo = txp.Legajo
+		inner join pedidos p on p.id = txp.IDPedido
+		where c.ModalidadTrabajo = 'p' and p.id = txp.IDPedido
+
+	)
+
+	FROM PRODUCTOS Pro
+	select * from Tareas_x_Pedido order by Tareas_x_Pedido.IDPedido
+
+
+	SELECT PR.Descripcion, (
+SELECT COUNT(DISTINCT CO.Legajo) FROM Pedidos PE
+INNER JOIN Tareas_x_Pedido TXP ON TXP.IDPedido = PE.ID
+INNER JOIN Colaboradores CO ON CO.Legajo = TXP.Legajo
+WHERE CO.ModalidadTrabajo = 'F' AND PR.ID = PE.IDProducto
+) AS 'FULLTIME', (
+SELECT COUNT(DISTINCT CO.Legajo) FROM Pedidos PE
+INNER JOIN Tareas_x_Pedido TXP ON TXP.IDPedido = PE.ID
+INNER JOIN Colaboradores CO ON CO.Legajo = TXP.Legajo
+WHERE CO.ModalidadTrabajo = 'P' AND PR.ID = PE.IDProducto
+) AS 'PARTTIME'
+FROM Productos PR
+
+
+ select pro.Descripcion , (
+ select count(distinct c.legajo) from pedidos p
+ inner join tareas_x_pedido txp on p.id = txp.IDPedido
+ inner join colaboradores c on txp.Legajo = c.Legajo
+where c.ModalidadTrabajo = 'P' and pro.id = p.IDProducto) PARTIME,
+ (
+ select count(distinct c.legajo) from pedidos p
+ inner join tareas_x_pedido txp on p.id = txp.IDPedido
+ inner join colaboradores c on txp.Legajo = c.Legajo
+where c.ModalidadTrabajo = 'F' and pro.id = p.IDProducto) FULLTIME
+
+from productos pro
 
 
 --8
---Por cada producto, la descripción y la cantidad de pedidos enviados y la cantidad de pedidos sin envío.
+--Por cada producto, la descripción y la cantidad de pedidos enviados y
+--la cantidad de pedidos sin envío.
+
+SELECT PRO.DESCRIPCION,( select count(distinct p.id) from envios e
+inner join pedidos p on e.IDPedido = p.ID
+where p.IDProducto = pro.id ) enviado,
+
+
+(select count(distinct pe.id) from pedidos pe
+--inner join envios env on env.IDPedido =  pe.id
+where pe.IDProducto = pro. id and pe.id not in(select idPedido from envios))
+
+from productos pro 
+
+FROM PRODUCTOS
+
+
+select p.id from pedidos p
+inner join envios e on p.id = e.IDPedido
+where p.id in ( select pe.id from pedidos pe
+inner join envios e on pe.id = e.IDPedido)
+
+
+
+
+
 --9
---Por cada cliente, apellidos y nombres y la cantidad de pedidos solicitados en los años 2020, 2021 y 2022. (Cada año debe mostrarse en una columna separada)
+--Por cada cliente, apellidos y nombres y la cantidad de pedidos
+--solicitados en los años 2020, 2021 y 2022. (Cada año debe mostrarse en una columna separada)
+select c.nombres , c.apellidos,
+( select count(distinct pe.id) from pedidos pe
+
+where year(pe.FechaSolicitud) = 2022 andN  = pe.IDClientE
+ )
+
+
+
+from clientes c
+
+
+
+
+
+
 --10
 --Por cada producto, listar la descripción del producto, el costo y los materiales de construcción (en una celda separados por coma)
 --11
