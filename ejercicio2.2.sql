@@ -165,8 +165,16 @@ inner join envios e on pe.id = e.IDPedido)
 select c.nombres , c.apellidos,
 ( select count(distinct pe.id) from pedidos pe
 
-where year(pe.FechaSolicitud) = 2022 andN  = pe.IDClientE
- )
+where year(pe.FechaSolicitud) = 2020 and c.ID = pe.IDCliente
+ ),
+ ( select count(distinct pe.id) from pedidos pe
+
+where year(pe.FechaSolicitud) = 2021 and c.ID = pe.IDCliente
+ ), 
+  ( select count(distinct pe.id) from pedidos pe
+
+where year(pe.FechaSolicitud) = 2022 and c.ID = pe.IDCliente
+ ) 
 
 
 
@@ -178,13 +186,71 @@ from clientes c
 
 
 --10
---Por cada producto, listar la descripción del producto, el costo y los materiales de construcción (en una celda separados por coma)
+--Por cada producto, listar la descripción del producto, el costo y los materiales de construcción
+--(en una celda separados por coma)
+
+select pro.descripcion, pro.costo, (select STRING_AGG(mat.nombre, ', ')
+from materiales mat
+inner join Materiales_x_Producto mxp on mat.id = mxp.IDMaterial
+where pro.id = mxp.IDProducto
+)
+from productos pro
+
+
+
+
 --11
---Por cada pedido, listar el ID, la fecha de solicitud, el nombre del producto, los apellidos y nombres de los colaboradores que trabajaron en el pedido y la/s tareas que el colaborador haya realizado (en una celda separados por coma)
+-- Por cada pedido, listar el ID, la fecha de solicitud, el nombre del producto, los apellidos y 
+-- nombres de los colaboradores que trabajaron en el pedido y la/s tareas que el colaborador haya
+-- realizado (en una celda separados por coma)
+	
+	select p.id, p.fechaSolicitud , co.nombres, co.apellidos,
+	( select string_agg(t.nombre, ', ') from tareas t
+	inner join Tareas_x_Pedido txp on p.ID = txp.IDPedido
+	inner join Colaboradores c on c.Legajo = txp.legajo
+	where txp.IDTarea = t.id) trabajos
+
+	from pedidos p
+	inner join tareas_x_pedido txp on txp.idPedido = p.id
+	inner join colaboradores co on txp.legajo = co.legajo
+	where co.legajo = txp.legajo
+
+	
+	
+	
+
+
 --12
 --Las descripciones de los productos que hayan requerido el doble de colaboradores fulltime que colaboradores partime.
+
+	
+ 
+	select pro.descripcion from productos pro
+
+	where ((select count(distinct co.legajo)  from Colaboradores co
+	inner join Tareas_x_Pedido txp on txp.legajo = co.Legajo
+	inner join pedidos p on txp.IDPedido = p.ID
+	where p.IDProducto = pro.id and co.ModalidadTrabajo = 'P') *2)
+=
+	(select count(distinct co.legajo)  from Colaboradores co
+	inner join Tareas_x_Pedido txp on txp.legajo = co.Legajo
+	inner join pedidos p on txp.IDPedido = p.ID
+	where p.IDProducto = pro.id and co.ModalidadTrabajo = 'F')
+
+
+
+	select count(distinct co.legajo)  from Colaboradores co
+	inner join Tareas_x_Pedido txp on txp.legajo = co.Legajo
+	inner join pedidos p on txp.IDPedido = p.ID
+	where p.IDProducto = pro.id
+
 --13
 --Las descripciones de los productos que tuvieron más pedidos sin envíos que con envíos pero que al menos tuvieron un pedido enviado.
+	.
+	select pro.descripcion from productos pro
+	where (
+
+
 --14
 --Los nombre y apellidos de los clientes que hayan realizado pedidos en los años 2020, 2021 y 2022 pero que la cantidad de pedidos haya decrecido en cada año. Añadirle al listado aquellos clientes que hayan realizado exactamente la misma cantidad de pedidos en todos los años y que dicha cantidad no sea cero.
 
