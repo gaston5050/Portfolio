@@ -246,11 +246,110 @@ from productos pro
 
 --13
 --Las descripciones de los productos que tuvieron más pedidos sin envíos que con envíos pero que al menos tuvieron un pedido enviado.
-	.
-	select pro.descripcion from productos pro
+	
+	select pro.Descripcion, (
+	select count(pe.IDProducto) from pedidos pe
+	where pe.IDProducto = pro.id) cantPedidos,
+	(
+		select count(pe.idproducto) from pedidos pe
+	inner join envios env on pe.id = env.IDPedido
+	where  pe.ID = env.IDPedido and pe.IDProducto = pro.id
+	) enEnvio
+	
+	from productos pro
+
 	where (
+	select count(pe.IDProducto) from pedidos pe
+	where pe.IDProducto = pro.id)
+	
+	>
+	(
+	
+	select count(pe.IDProducto) from pedidos pe
+	inner join envios env on pe.id = env.IDPedido
+	where  pe.IDproducto = pro.ID
+
+
+	)
+
+
+
+	and (select count(pe.IDProducto) from pedidos pe
+	inner join envios env on pe.id = env.IDPedido
+	where  env.Entregado = 1 and pe.IDProducto = pro.id)  >1
+
+
+
+
+
+	select * from productos pro 
+	where (select count(pe.IDProducto) from pedidos pe
+	inner join envios env on pe.id = env.IDPedido
+	where  env.Entregado = 1 and pe.IDProducto = pro.id)<> null
+
+
+
+
+
+
+
+select count(pe.IDProducto) from envios env
+	inner join pedidos pe on pe.id = env.IDPedido
+	where  env.Entregado = 1 and pe.IDProducto = pro.id
+
+
+	
+	SELECT TOP 1 WITH TIES P.Descripcion
+FROM Productos P WHERE
+(SELECT COUNT(Pedidos.ID) FROM Pedidos 
+WHERE Pedidos.ID NOT IN (SELECT Envios.IDPedido From Envios) AND P.ID = Pedidos.IDProducto) > 
+(SELECT COUNT(Pedidos.ID) FROM Pedidos 
+WHERE Pedidos.ID IN (SELECT Envios.IDPedido From Envios) AND P.ID = Pedidos.IDProducto) AND
+(SELECT COUNT(Pedidos.ID) FROM Pedidos 
+WHERE Pedidos.ID IN (SELECT Envios.IDPedido From Envios) AND P.ID = Pedidos.IDProducto) >= 1
+ORDER BY (SELECT COUNT(Pedidos.ID) FROM Pedidos 
+WHERE Pedidos.ID NOT IN (SELECT Envios.IDPedido From Envios) AND P.ID = Pedidos.IDProducto) DESC
+
+
+SELECT Descripcion FROM (
+    SELECT PROD.Descripcion,
+        (
+            SELECT COUNT(*) FROM Pedidos PED
+            WHERE PED.IDProducto = PROD.ID
+        ) AS Cant_Pedidos_Totales,
+        (
+            SELECT COUNT(*) FROM Pedidos PED
+            INNER JOIN Envios ENV ON ENV.IDPedido = PED.ID
+            WHERE PED.IDProducto = PROD.ID
+        ) AS Cant_Pedidos_Enviados
+    FROM Productos PROD
+) AS Productos
+WHERE (Cant_Pedidos_Totales - Cant_Pedidos_Enviados) > Cant_Pedidos_Enviados AND Cant_Pedidos_Enviados > 0
+
+
+select distinct p.Descripcion
+from Productos as p where
+(
+select count(*) from pedidos as ped
+left join envios as env on env.IDPedido = ped.ID
+where env.IDPedido is null
+)> (
+select count(*) from pedidos as ped
+inner join envios as env on env.IDPedido = ped.ID
+where env.IDPedido is not null
+) and
+(select count(*) from pedidos as ped
+inner join envios as env on env.IDPedido = ped.ID
+where env.IDPedido is not null)>0
 
 
 --14
---Los nombre y apellidos de los clientes que hayan realizado pedidos en los años 2020, 2021 y 2022 pero que la cantidad de pedidos haya decrecido en cada año. Añadirle al listado aquellos clientes que hayan realizado exactamente la misma cantidad de pedidos en todos los años y que dicha cantidad no sea cero.
+--Los nombre y apellidos de los clientes que hayan realizado pedidos en los años
+--2020, 2021 y 2022 pero que la cantidad de pedidos haya decrecido en cada año. 
+--Añadirle al listado aquellos clientes que hayan realizado exactamente la misma
+--cantidad de pedidos en todos los años y que dicha cantidad no sea cero.
 
+select c.nombres, c.apellidos 
+
+
+from clientes c
